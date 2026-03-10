@@ -174,9 +174,10 @@ export const useUserStore = create((set, get) => ({
 	logout: async () => {
 		try {
 			await axios.post("/auth/logout");
-			set({ user: null });
 		} catch (error) {
-			toast.error(error.response?.data?.message || "Logout failed");
+			console.log("Logout error:", error.message);
+		} finally {
+			set({ user: null, checkingAuth: false });
 		}
 	},
 
@@ -250,6 +251,11 @@ axios.interceptors.response.use(
 	async (error) => {
 		const originalRequest = error.config;
 
+		// Don't intercept refresh-token or logout calls to avoid loops
+		if (originalRequest.url?.includes("/auth/refresh-token") || originalRequest.url?.includes("/auth/logout")) {
+			return Promise.reject(error);
+		}
+
 		if (error.response?.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
 
@@ -264,9 +270,10 @@ axios.interceptors.response.use(
 				refreshPromise = null;
 
 				return axios(originalRequest);
-			} catch {
+			} catch (refreshError) {
+				refreshPromise = null;
 				useUserStore.getState().logout();
-				return Promise.reject(error);
+				return Promise.reject(refreshError);
 			}
 		}
 
