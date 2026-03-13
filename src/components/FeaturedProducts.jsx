@@ -55,9 +55,14 @@ const FeaturedProducts = ({ featuredProducts }) => {
 										</div>
 										<div className='p-4'>
 											<h3 className='text-lg font-bold mb-2 text-white leading-tight'>{product.name}</h3>
-											<p className='text-2xl font-black text-emerald-400 mb-4'>
+											<p className='text-2xl font-black text-emerald-400 mb-2'>
 												₹{product.price.toLocaleString()}
 											</p>
+											<div className="mb-4">
+												<span className={`text-[10px] font-bold px-2 py-0.5 rounded ${product.stock > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+													{product.stock > 0 ? `${product.stock} IN STOCK` : 'OUT OF STOCK'}
+												</span>
+											</div>
 											<button
 												onClick={() => addToCart(product)}
 												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 

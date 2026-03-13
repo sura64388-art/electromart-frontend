@@ -82,7 +82,7 @@ const ProductCard = ({ product, layout = "grid", index = 2 }) => {
 				<div className="p-4 flex flex-col flex-1">
 					<div className="mb-1">
 						<span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest font-sans">
-							{product.brand === "N/A" ? (() => {
+							{(!product.brand || product.brand === "N/A" || product.brand.trim() === "") ? (() => {
 								const found = ["Atomberg", "Havells", "Orient", "Crompton", "V-Guard", "Anchor", "Luker", "Panasonic", "Philips", "Sturlite", "Luminous", "Exide", "Microtek", "Finolex", "Polycab", "RR Kabel", "Orbit", "Legrand", "GM", "Cona", "Bajaj", "AO Smith", "Racold", "Tornado", "Secure", "L&T", "Genus", "Schneider", "ABB", "Siemens", "Kirloskar", "Texmo", "CRI", "KSB", "Bindu", "Usha"]
 									.find(b => product.name.toLowerCase().includes(b.toLowerCase()));
 								if (found === "Tornado") return "Orient";
@@ -102,12 +102,18 @@ const ProductCard = ({ product, layout = "grid", index = 2 }) => {
 						</div>
 
 						{discount > 0 && (
-							<div className="flex items-center gap-2 text-[12px] mb-4">
+							<div className="flex items-center gap-2 text-[12px] mb-2">
 								<span className="text-gray-400 font-medium">MRP</span>
 								<span className="text-gray-400 line-through">₹{mrp.toLocaleString()}</span>
 								<span className="text-[#b31919] font-bold">({discount}% OFF)</span>
 							</div>
 						)}
+
+						<div className="flex items-center gap-2 mb-4">
+							<span className={`text-[11px] font-bold px-2 py-0.5 rounded ${product.stock > 10 ? 'bg-green-100 text-green-700' : product.stock > 0 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
+								{product.stock > 0 ? `${product.stock} IN STOCK` : 'OUT OF STOCK'}
+							</span>
+						</div>
 
 						{/* Action Buttons */}
 						<div className="flex flex-col gap-2 mt-4">

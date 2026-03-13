@@ -100,39 +100,36 @@ const CategoryPage = () => {
     let grouped = false;
     let groups = [];
 
-    // If a brand is selected and no category is active, show the subcategories (product items) for that brand
-    if (!activeCat && selectedBrands.length > 0) {
-      const brandProducts = products.filter(p =>
-        selectedBrands.some(brand => p.brand && p.brand.toLowerCase() === brand.toLowerCase()) ||
-        selectedBrands.some(brand => p.name.toLowerCase().includes(brand.toLowerCase()))
-      );
-      const uniqueSubCats = [...new Set(brandProducts.map(p => p.subCategory).filter(Boolean))];
-      items = uniqueSubCats.map(name => ({ name }));
-    } else if (!activeCat) {
-      // Show main categories if no specific category is selected (e.g., brand page)
-      items = categories.map(c => ({ name: c.name, slug: c.slug }));
-    } else if (category === "fan") {
+    // Derive subcategories dynamically from the products we have
+    // This addresses "fetch to all category" by showing what's actually in the database
+    const subCategoryCounts = new Map();
+
+    // If we are in a specific category, show subcategories for THAT category
+    // If not (e.g. search page), show ALL subcategories found in the results
+    products.forEach(p => {
+      if (p.subCategory) {
+        subCategoryCounts.set(p.subCategory, (subCategoryCounts.get(p.subCategory) || 0) + 1);
+      }
+    });
+
+    if (activeCat && category === "fan") {
+      // Keep your special grouping for fans if you prefer, or dynamicize it
       grouped = true;
       groups = [
         { group: "Light Bulbs", items: ["LED Bulb", "LED Batten", "LED Night Bulb"] },
         { group: "Ceiling Lights", items: ["LED Panel Light"] },
         { group: "Fan", items: ["Pedestal Fan", "Table Fan", "Wall Fan", "Exhaust Fan", "Ceiling Fan"] }
       ];
+      // Still filter these by what actually exists in products
+      groups = groups.map(g => ({
+        ...g,
+        items: g.items.filter(name => subCategoryCounts.has(name))
+      })).filter(g => g.items.length > 0);
     } else {
-      const subCats = {
-        "switches": [
-          "Switch Board Plate", "Switch", "Electrical Socket", "Blank Plate Cover",
-          "Fan Regulator", "Modular Surface Box", "Plug Top", "Lamp Holder",
-          "Communication Socket", "Door Bell", "Multi Plug Adaptor",
-          "Spike Guard", "Combined Box"
-        ],
-        "power": ["Inverter Battery", "Inverter", "Stabilizer", "Inverter Trolly"],
-        "water-heaters": ["Electric Geyser", "Instant Geyser", "Solar Water Heater"],
-        "wires-cables": ["Low Tension Wire", "Coaxial TV Cable", "LAN Cable", "CCTV Cable"],
-        "water-pumps": ["Centrifugal Pumps", "Submersible Pumps", "Pressure Pumps", "Induction Motors"],
-        "metering-distribution": ["Single Phase Energy Meters", "Three Phase Energy Meters", "Distribution Boards (DB / MDB / SDB)", "Circuit Breakers (MCB / MCCB / ACB)"]
-      };
-      items = (subCats[category] || []).map(name => ({ name }));
+      // Sort subcategories by count or name
+      items = Array.from(subCategoryCounts.entries())
+        .map(([name, count]) => ({ name, count }))
+        .sort((a, b) => b.count - a.count);
     }
 
     // Filter by search
@@ -149,7 +146,7 @@ const CategoryPage = () => {
     }
 
     return { grouped, items, groups };
-  }, [category, categorySearch, selectedBrands, products]);
+  }, [category, categorySearch, products]);
 
   // CATEGORY BANNER SLIDER STATE
   const categoryBanners = {
@@ -218,18 +215,25 @@ const CategoryPage = () => {
   }, [minPrice, maxPrice]);
 
   // FILTER + SORT LOGIC
-  const filteredProducts = useMemo(() => {
+  const baseFilteredProducts = useMemo(() => {
     let data = [...products];
 
     // Search Query Filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      data = data.filter(p =>
-        (p.name && p.name.toLowerCase().includes(query)) ||
-        (p.description && p.description.toLowerCase().includes(query)) ||
-        (p.category && p.category.toLowerCase().includes(query)) ||
-        (p.brand && p.brand.toLowerCase().includes(query))
-      );
+      data = data.filter(p => {
+        let inferredBrand = p.brand;
+        if (!p.brand || p.brand === "N/A" || p.brand.trim() === "") {
+          const found = ["Atomberg", "Havells", "Orient", "Crompton", "V-Guard", "Anchor", "Luker", "Panasonic", "Philips", "Sturlite", "Luminous", "Exide", "Microtek", "Finolex", "Polycab", "RR Kabel", "Orbit", "Legrand", "GM", "Cona", "Bajaj", "AO Smith", "Racold", "Tornado", "Secure", "L&T", "Genus", "Schneider", "ABB", "Siemens", "Kirloskar", "Texmo", "CRI", "KSB", "Bindu", "Usha"]
+            .find(b => p.name.toLowerCase().includes(b.toLowerCase()));
+          inferredBrand = found || "N/A";
+          if (inferredBrand.toLowerCase() === "tornado") inferredBrand = "Orient";
+        }
+
+        return (p.name && p.name.toLowerCase().includes(query)) ||
+          (inferredBrand && inferredBrand.toLowerCase().includes(query)) ||
+          (p.category && p.category.toLowerCase().includes(query));
+      });
     }
 
     // Price filter
@@ -246,7 +250,7 @@ const CategoryPage = () => {
 
         // If the product has a different brand assigned, don't fallback to name search
         // This prevents "GM" products showing up when searching for "Anchor" if "Anchor" is in the name
-        if (p.brand && p.brand !== "N/A" && !isBrandMatch) return false;
+        if (p.brand && p.brand !== "N/A" && p.brand.trim() !== "" && !isBrandMatch) return false;
 
         // Fallback to name search only if brand is missing or matches
         return selectedBrands.some(brand => p.name.toLowerCase().includes(brand.toLowerCase()));
@@ -260,6 +264,12 @@ const CategoryPage = () => {
         selectedColors.some(color => p.name.toLowerCase().includes(color.toLowerCase()))
       );
     }
+
+    return data;
+  }, [products, minPrice, maxPrice, selectedBrands, selectedColors, searchQuery]);
+
+  const filteredProducts = useMemo(() => {
+    let data = [...baseFilteredProducts];
 
     // SubCategory filter
     if (selectedSubCategory) {
@@ -286,7 +296,7 @@ const CategoryPage = () => {
     }
 
     return data;
-  }, [products, minPrice, maxPrice, sort, selectedBrands, selectedColors, selectedSubCategory, searchQuery]);
+  }, [baseFilteredProducts, sort, selectedSubCategory]);
 
   // Pagination calculation
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -357,26 +367,72 @@ const CategoryPage = () => {
   const hasActiveFilters = minPrice > 0 || maxPrice < 100000 || sort || selectedBrands.length > 0 || selectedColors.length > 0;
   const currentCategory = categories.find(cat => cat.slug === category);
 
-  // Dynamic Metadata for Sidebar
-  const switchBrands = ["Anchor", "Legrand", "GM", "Cona"];
-  const powerBrands = ["Luminous", "Exide", "V-Guard", "Microtek"];
-  const meteringBrands = ["Secure Meters", "L&T (Larsen & Toubro)", "Genus Power", "Schneider Electric", "ABB", "Siemens"];
-  const waterPumpBrands = ["Crompton", "Kirloskar", "Texmo", "CRI", "V-Guard", "KSB", "Havells", "Bindu"];
-  const wireBrands = ["Finolex", "Polycab", "Havells", "RR Kabel", "Orbit"];
-  const fanBrands = ["Atomberg", "Havells", "Orient", "Crompton", "V-Guard", "Anchor", "Luker", "Panasonic", "Philips", "Sturlite"];
-  const waterHeaterBrands = ["AO Smith", "Racold", "Bajaj", "V-Guard"];
-  const brandList = category === "switches" ? switchBrands :
-    category === "power" ? powerBrands :
-      category === "metering-distribution" ? meteringBrands :
-        category === "water-pumps" ? waterPumpBrands :
-          (category === "wires-cables" || category === "wires & cables") ? wireBrands :
-            category === "fan" ? fanBrands :
-              category === "water-heaters" ? waterHeaterBrands : [];
+  // Dynamic Metadata for Brands
+  const dynamicBrands = useMemo(() => {
+    // 1. Get all brands available in the current product pool (filtered by category if applicable)
+    // 2. Calculate counts based on other active filters (Search, Price, Color, Subcategory)
 
-  const dynamicBrands = brandList.map(brand => ({
-    name: brand,
-    count: products.filter(p => p.brand === brand || p.name.toLowerCase().includes(brand.toLowerCase())).length || 0
-  }));
+    const brandInferenceList = ["Atomberg", "Havells", "Orient", "Crompton", "V-Guard", "Anchor", "Luker", "Panasonic", "Philips", "Sturlite", "Luminous", "Exide", "Microtek", "Finolex", "Polycab", "RR Kabel", "Orbit", "Legrand", "GM", "Cona", "Bajaj", "AO Smith", "Racold", "Tornado", "Secure", "L&T", "Genus", "Schneider", "ABB", "Siemens", "Kirloskar", "Texmo", "CRI", "KSB", "Bindu", "Usha"];
+
+    // Products that match Search, Price, Color, and SubCategory
+    let baseForBrands = products;
+
+    // Apply Search Query filter (matches logic in baseFilteredProducts)
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      baseForBrands = baseForBrands.filter(p => {
+        let b = p.brand;
+        if (!b || b === "N/A" || b.trim() === "") {
+          const found = brandInferenceList.find(name => p.name.toLowerCase().includes(name.toLowerCase()));
+          b = found || "N/A";
+          if (b.toLowerCase() === "tornado") b = "Orient";
+        }
+        return (p.name && p.name.toLowerCase().includes(query)) ||
+          (b && b.toLowerCase().includes(query)) ||
+          (p.category && p.category.toLowerCase().includes(query));
+      });
+    }
+
+    // Apply Color filter
+    if (selectedColors.length > 0) {
+      baseForBrands = baseForBrands.filter(p =>
+        (p.color && selectedColors.some(color => color.toLowerCase() === p.color.toLowerCase())) ||
+        selectedColors.some(color => p.name.toLowerCase().includes(color.toLowerCase()))
+      );
+    }
+
+    // Apply Price filter
+    baseForBrands = baseForBrands.filter(p => p.price >= minPrice && p.price <= maxPrice);
+
+    // Apply SubCategory filter (THIS IS THE CORE REQUEST)
+    if (selectedSubCategory) {
+      baseForBrands = baseForBrands.filter(p => p.subCategory === selectedSubCategory);
+    }
+
+    // Now count the brands found in this set
+    const countsMap = new Map();
+    baseForBrands.forEach(p => {
+      let b = p.brand;
+      if (!b || b === "N/A" || b.trim() === "") {
+        const found = brandInferenceList.find(name => p.name.toLowerCase().includes(name.toLowerCase()));
+        b = found || "N/A";
+        if (b.toLowerCase() === "tornado") b = "Orient";
+      }
+      if (b && b !== "N/A") {
+        countsMap.set(b, (countsMap.get(b) || 0) + 1);
+      }
+    });
+
+    let results = Array.from(countsMap.entries()).map(([name, count]) => ({ name, count }));
+
+    // Apply Brand Search filter
+    if (brandSearch) {
+      const bSearch = brandSearch.toLowerCase();
+      results = results.filter(b => b.name.toLowerCase().includes(bSearch));
+    }
+
+    return results.sort((a, b) => b.count - a.count);
+  }, [products, searchQuery, minPrice, maxPrice, selectedColors, selectedSubCategory, brandSearch]);
 
   const sortOptions = [
     { label: "Popularity", value: "" },
@@ -493,13 +549,8 @@ const CategoryPage = () => {
                       <p className="font-bold text-red-600 text-sm mb-2">{group.group}</p>
                       <div className="space-y-1">
                         {group.items.map((subName) => {
-                          const count = products.filter(p => {
-                            const matchesSub = p.subCategory === subName;
-                            const matchesBrand = selectedBrands.length > 0
-                              ? (selectedBrands.includes(p.brand) || selectedBrands.some(b => p.name.toLowerCase().includes(b.toLowerCase())))
-                              : true;
-                            return matchesSub && matchesBrand;
-                          }).length;
+                          const count = baseFilteredProducts.filter(p => p.subCategory === subName).length;
+                          if (count === 0) return null;
                           return (
                             <div
                               key={subName}
@@ -522,26 +573,21 @@ const CategoryPage = () => {
                 </div>
               ) : (
                 // Flat layout for other categories
-                <div className="space-y-4">
+                <div className="space-y-2">
                   {sidebarCategories.items.map((item) => {
-                    const count = products.filter(p => {
-                      const matchesCategory = item.slug ? p.category === item.slug : p.subCategory === item.name;
-                      const matchesBrand = selectedBrands.length > 0
-                        ? (selectedBrands.includes(p.brand) || selectedBrands.some(b => p.name.toLowerCase().includes(b.toLowerCase())))
-                        : true;
-                      return matchesCategory && matchesBrand;
+                    const count = baseFilteredProducts.filter(p => {
+                      return item.slug ? p.category === item.slug : p.subCategory === item.name;
                     }).length;
+
+                    if (count === 0) return null;
+
                     const isActive = item.slug ? category === item.slug : selectedSubCategory === item.name;
 
                     return (
                       <div
                         key={item.name}
                         onClick={() => {
-                          if (item.slug) {
-                            navigate(`/category/${item.slug}${location.search}`);
-                          } else {
-                            setSelectedSubCategory(selectedSubCategory === item.name ? "" : item.name);
-                          }
+                          setSelectedSubCategory(selectedSubCategory === item.name ? "" : item.name);
                         }}
                         className="flex items-center gap-2 text-[15px] cursor-pointer group hover:bg-gray-50 -mx-2 px-2 py-1 rounded-md transition-colors relative"
                       >
@@ -550,7 +596,7 @@ const CategoryPage = () => {
                           {item.name}
                         </span>
                         <span className="text-[13.5px] text-gray-400 font-normal">
-                          ({count})
+                          ({item.count})
                         </span>
                       </div>
                     );
@@ -560,18 +606,31 @@ const CategoryPage = () => {
             </div>
 
             {/* Brand Filter */}
-            {(category === "switches" || category === "power" || category === "metering-distribution" || category === "water-pumps" || category === "wires-cables" || category === "wires & cables" || category === "fan" || category === "water-heaters") && dynamicBrands.length > 0 && (
+            {dynamicBrands.length > 0 && (
               <div className="bg-white py-8 border-b border-gray-100">
                 <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-tight">BRAND</h3>
-                <div className="space-y-4">
+
+                {/* Brand Search Input */}
+                <div className="relative mb-6">
+                  <input
+                    type="text"
+                    placeholder="Search for Brand"
+                    value={brandSearch}
+                    onChange={(e) => setBrandSearch(e.target.value)}
+                    className="w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-sm text-sm focus:outline-none focus:border-red-500 placeholder:text-gray-400"
+                  />
+                  <Search size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
                   {dynamicBrands.map((item) => (
-                    <label key={item.name} className="flex items-center gap-3 cursor-pointer group">
+                    <label key={item.name} className="flex items-center gap-3 cursor-pointer group py-1">
                       <div className="relative flex items-center justify-center">
                         <input
                           type="checkbox"
                           checked={selectedBrands.includes(item.name)}
                           onChange={() => handleBrandToggle(item.name)}
-                          className="w-5 h-5 border border-gray-300 rounded-none bg-white checked:bg-white checked:border-gray-900 appearance-none cursor-pointer transition-all"
+                          className="w-4.5 h-4.5 border border-gray-300 rounded-none bg-white checked:bg-white checked:border-gray-900 appearance-none cursor-pointer transition-all"
                         />
                         {selectedBrands.includes(item.name) && (
                           <div className="absolute pointer-events-none text-gray-900">
@@ -580,10 +639,10 @@ const CategoryPage = () => {
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[16px] text-zinc-700 font-medium font-sans">
+                        <span className="text-[17px] text-gray-700 font-medium font-sans group-hover:text-red-500 transition-colors">
                           {item.name}
                         </span>
-                        <span className="text-[14px] text-gray-400 font-normal">
+                        <span className="text-[15px] text-gray-400 font-normal">
                           ({item.count})
                         </span>
                       </div>

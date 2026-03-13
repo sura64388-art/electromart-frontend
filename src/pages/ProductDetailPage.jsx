@@ -328,13 +328,19 @@ const ProductDetailPage = () => {
             </div>
 
             {/* Stock Status */}
-            <div className="p-4 rounded-xl bg-linear-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10">
+            <div className={`p-4 rounded-xl ${selectedProduct.stock > 0 ? 'bg-linear-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10' : 'bg-red-50 dark:bg-red-900/10'}`}>
               <div className="flex items-center gap-3">
-                <Check size={20} className="text-green-600 dark:text-green-400" />
+                {selectedProduct.stock > 0 ? (
+                  <Check size={20} className="text-green-600 dark:text-green-400" />
+                ) : (
+                  <X size={20} className="text-red-600 dark:text-red-400" />
+                )}
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Available</p>
+                  <p className={`font-medium ${selectedProduct.stock > 0 ? 'text-gray-900 dark:text-white' : 'text-red-600 dark:text-red-400'}`}>
+                    {selectedProduct.stock > 0 ? 'Available' : 'Out of Stock'}
+                  </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    In Stock - Ready to Ship
+                    {selectedProduct.stock > 0 ? `${selectedProduct.stock} units in stock - Ready to Ship` : 'Temporarily unavailable'}
                   </p>
                 </div>
               </div>

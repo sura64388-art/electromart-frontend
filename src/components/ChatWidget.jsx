@@ -48,7 +48,6 @@ const ChatWidget = () => {
         { text: "What's the warranty period on your products?", icon: Clock, color: "text-amber-500", bg: "bg-amber-50" },
     ];
 
-    if (user?.role === "admin") return null;
 
     const handleSendMessage = async (text = inputValue, type = "text") => {
         if (type === "text" && !text.trim()) return;

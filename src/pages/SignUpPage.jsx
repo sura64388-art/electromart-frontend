@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { UserPlus, Mail, Lock, User, ArrowRight, Loader, Shield, CheckCircle, Eye, EyeOff, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { GoogleLogin } from "@react-oauth/google";
 import { useUserStore } from "../stores/useUserStore";
+import toast from "react-hot-toast";
 
 const getPasswordStrength = (password) => {
   let score = 0;
@@ -55,7 +57,7 @@ const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { signup, loading } = useUserStore();
+  const { signup, googleLogin, loading } = useUserStore();
   const { strength, checks } = getPasswordStrength(formData.password);
 
   const handleSubmit = (e) => {
@@ -67,6 +69,14 @@ const SignUpPage = () => {
     }
 
     signup(formData);
+  };
+
+  const handleGoogleSuccess = async (response) => {
+    try {
+      await googleLogin(response.credential);
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
   };
 
   const passwordMatch = formData.password === formData.confirmPassword;
@@ -360,6 +370,27 @@ const SignUpPage = () => {
                   </>
                 )}
               </motion.button>
+
+              {/* OR Divider */}
+              <div className="relative flex items-center justify-center py-2">
+                <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+                <span className="flex-shrink px-4 text-sm font-medium text-gray-400 uppercase bg-white dark:bg-gray-800">
+                  Or continue with
+                </span>
+                <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+              </div>
+
+              {/* GOOGLE LOGIN BUTTON */}
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => toast.error("Google Login failed")}
+                  useOneTap
+                  theme="filled_blue"
+                  shape="pill"
+                  width={300}
+                />
+              </div>
             </form>
 
             {/* FOOTER */}

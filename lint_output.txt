@@ -1,0 +1,140 @@
+﻿
+> electricial-frontend@1.0.0 lint
+> eslint .
+
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\AdminHomeTab.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\AdminOrdersTab.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\AnalyticsTab.jsx
+  30:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                     no-unused-vars
+  47:24  error  'setDailyRevenue' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+  53:25  error  'setCategorySales' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\AnimatedCounter.jsx
+   1:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                              no-unused-vars
+  11:5   warning  React Hook useEffect has missing dependencies: 'count' and 'duration'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\BillingPreviewModal.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\CartItem.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\CategoryPage.jsx
+  11:6  warning  React Hook useEffect has a missing dependency: 'fetchProductsByCategory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\ChatWidget.jsx
+  16:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\ContactSection.jsx
+  13:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\CreateProductForm.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\CustomersTab.jsx
+  14:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                   no-unused-vars
+  19:24  error  'setSearchTerm' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+  41:11  error  'handleDownload' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  48:11  error  'customerCount' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\EnquiriesTab.jsx
+  14:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\GiftCouponCard.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\OrderSummary.jsx
+   1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                        no-unused-vars
+  27:9   error  'showPreviewModal' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u     no-unused-vars
+  27:27  error  'setShowPreviewModal' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\ProductCard.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\ProductsList.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\components\ShippingMethodSelector.jsx
+  2:10  error  'useState' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\AdminPage.jsx
+  18:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\CartPage.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\CategoryPage.jsx
+    1:40  error    'useRef' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                     no-unused-vars
+    4:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                     no-unused-vars
+   52:7   error    'sortOptions' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                       no-unused-vars
+   61:64  error    'isLoading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                         no-unused-vars
+   78:10  error    'viewMode' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                          no-unused-vars
+   78:20  error    'setViewMode' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                       no-unused-vars
+   81:10  error    'expandedSections' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                  no-unused-vars
+   81:28  error    'setExpandedSections' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u               no-unused-vars
+   90:10  error    'showAllCategories' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                 no-unused-vars
+   90:29  error    'setShowAllCategories' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u              no-unused-vars
+   94:10  error    'brandSearch' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                       no-unused-vars
+   94:23  error    'setBrandSearch' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                    no-unused-vars
+  168:6   warning  React Hook useMemo has a missing dependency: 'categoryBanners'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  213:6   warning  React Hook useEffect has a missing dependency: 'searchParams'. Either include it or remove the dependency array   react-hooks/exhaustive-deps
+  313:9   error    'handleRangeChange' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                 no-unused-vars
+  338:9   error    'clearFilters' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                      no-unused-vars
+  357:9   error    'hasActiveFilters' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                  no-unused-vars
+  656:34  error    'setIsPriceOpen' is not defined                                                                                   no-undef
+  656:50  error    'isPriceOpen' is not defined                                                                                      no-undef
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\ContactPage.jsx
+  11:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\ForgotPassword.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\HomePage.jsx
+    2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                    no-unused-vars
+  106:34  error  'products' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u         no-unused-vars
+  106:44  error  'isLoading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u        no-unused-vars
+  108:10  error  'bannerSlide' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u      no-unused-vars
+  153:10  error  'scrollLeft' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u       no-unused-vars
+  154:10  error  'scrollWidth' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u      no-unused-vars
+  160:13  error  'percentage' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u       no-unused-vars
+  217:9   error  'nextBannerSlide' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  221:9   error  'prevBannerSlide' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\LoginPage.jsx
+   2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  22:14  error  'error' is defined but never used                                              no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\MyOrdersPage.jsx
+   27:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  108:14  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\OrderDetailPage.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\ProductDetailPage.jsx
+  22:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\ProfilePage.jsx
+  30:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\PurchaseCancelPage.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\ResetPassword.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                 no-unused-vars
+  18:3   error  React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\pages\SignUpPage.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\LENOVO\Desktop\sree saravana electricials\stores-main\frontend\src\stores\useProductStore.js
+  61:12  error  'error' is defined but never used  no-unused-vars
+
+Γ£û 69 problems (65 errors, 4 warnings)
+

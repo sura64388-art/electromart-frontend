@@ -22,7 +22,16 @@ const ProductsList = ({ onEdit }) => {
     const matchMin = min ? p.price >= Number(min) : true;
     const matchMax = max ? p.price <= Number(max) : true;
     const matchCategory = selectedCategory === "all" || p.category === selectedCategory;
-    const matchBrand = selectedBrand === "all" || p.brand === selectedBrand;
+
+    let inferredBrand = p.brand;
+    if (p.brand === "N/A" || !p.brand) {
+      const found = ["Atomberg", "Havells", "Orient", "Crompton", "V-Guard", "Anchor", "Luker", "Panasonic", "Philips", "Sturlite", "Luminous", "Exide", "Microtek", "Finolex", "Polycab", "RR Kabel", "Orbit", "Legrand", "GM", "Cona", "Bajaj", "AO Smith", "Racold", "Tornado", "Secure", "L&T", "Genus", "Schneider", "ABB", "Siemens", "Kirloskar", "Texmo", "CRI", "KSB", "Bindu", "Usha"]
+        .find(b => p.name.toLowerCase().includes(b.toLowerCase()));
+      inferredBrand = found || "N/A";
+      if (inferredBrand.toLowerCase() === "tornado") inferredBrand = "Orient";
+    }
+
+    const matchBrand = selectedBrand === "all" || inferredBrand === selectedBrand;
     return matchName && matchMin && matchMax && matchCategory && matchBrand;
   });
 
@@ -242,9 +251,14 @@ const ProductsList = ({ onEdit }) => {
                         {p.subCategory}
                       </span>
                     )}
-                    {p.brand && (
+                    {p.brand !== undefined && (
                       <span className="px-2 py-0.5 text-[9px] font-bold uppercase bg-purple-50 text-purple-600 border border-purple-100 rounded-md">
-                        {p.brand}
+                        {(!p.brand || p.brand === "N/A" || p.brand.trim() === "") ? (() => {
+                          const found = ["Atomberg", "Havells", "Orient", "Crompton", "V-Guard", "Anchor", "Luker", "Panasonic", "Philips", "Sturlite", "Luminous", "Exide", "Microtek", "Finolex", "Polycab", "RR Kabel", "Orbit", "Legrand", "GM", "Cona", "Bajaj", "AO Smith", "Racold", "Tornado", "Secure", "L&T", "Genus", "Schneider", "ABB", "Siemens", "Kirloskar", "Texmo", "CRI", "KSB", "Bindu", "Usha"]
+                            .find(b => p.name.toLowerCase().includes(b.toLowerCase()));
+                          if (found && found.toLowerCase() === "tornado") return "Orient";
+                          return found || "N/A";
+                        })() : p.brand}
                       </span>
                     )}
                   </div>

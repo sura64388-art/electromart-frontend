@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
       </main>
 
       {!isAdminPage && <Footer />}
-      {!isAdminPage && <ChatWidget />}
+      <ChatWidget />
     </div>
   );
 };

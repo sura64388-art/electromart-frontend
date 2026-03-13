@@ -25,7 +25,10 @@ import {
   Truck,
   XCircle,
   Package,
-  Zap
+  Zap,
+  AlertCircle,
+  Trophy,
+  ArrowUpRight
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -41,7 +44,10 @@ const AnalyticsTab = () => {
       shipped: 8,
       delivered: 18,
       cancelled: 2,
-    }
+      cancelled: 2,
+    },
+    topSellingProducts: [],
+    lowStockProducts: [],
   });
 
   const [dailyRevenue, setDailyRevenue] = useState([
@@ -65,8 +71,13 @@ const AnalyticsTab = () => {
       if (res.data.analyticsData) {
         setAnalyticsData(prev => ({
           ...prev,
+          totalUsers: res.data.analyticsData.users || prev.totalUsers,
           totalRevenue: res.data.analyticsData.totalRevenue || prev.totalRevenue,
           totalOrders: res.data.analyticsData.totalSales || prev.totalOrders,
+          avgOrderValue: res.data.analyticsData.totalSales > 0 ? (res.data.analyticsData.totalRevenue / res.data.analyticsData.totalSales).toFixed(0) : prev.avgOrderValue,
+          statuses: res.data.analyticsData.statuses || prev.statuses,
+          topSellingProducts: res.data.analyticsData.topSellingProducts || [],
+          lowStockProducts: res.data.analyticsData.lowStockProducts || [],
         }));
       }
     } catch (err) {
@@ -260,7 +271,8 @@ const AnalyticsTab = () => {
           </div>
         </div>
       </div>
-    </div>
+
+    </div >
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LogIn, Mail, Lock, ArrowRight, Loader, Eye, EyeOff, Shield, Key } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 import { useUserStore } from "../stores/useUserStore";
 import toast from "react-hot-toast";
 
@@ -11,15 +12,23 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { login, loading } = useUserStore();
+  const { login, googleLogin, loading } = useUserStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await login(email, password);
       toast.success("Welcome back!");
-    } catch (error) {
+    } catch {
       toast.error("Invalid email or password");
+    }
+  };
+
+  const handleGoogleSuccess = async (response) => {
+    try {
+      await googleLogin(response.credential);
+    } catch (error) {
+      console.error("Google login error:", error);
     }
   };
 
@@ -220,6 +229,27 @@ const LoginPage = () => {
                   </>
                 )}
               </motion.button>
+
+              {/* OR Divider */}
+              <div className="relative flex items-center justify-center py-2">
+                <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+                <span className="flex-shrink px-4 text-sm font-medium text-gray-400 uppercase bg-white dark:bg-gray-800">
+                  Or continue with
+                </span>
+                <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
+              </div>
+
+              {/* GOOGLE LOGIN BUTTON */}
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => toast.error("Google Login failed")}
+                  useOneTap
+                  theme="filled_blue"
+                  shape="pill"
+                  width={300}
+                />
+              </div>
             </form>
 
             {/* SIGN UP LINK */}
