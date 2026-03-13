@@ -44,7 +44,6 @@ const AnalyticsTab = () => {
       shipped: 8,
       delivered: 18,
       cancelled: 2,
-      cancelled: 2,
     },
     topSellingProducts: [],
     lowStockProducts: [],
