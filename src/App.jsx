@@ -76,13 +76,7 @@ function App() {
 
             <Route
               path="/reset-password"
-              element={
-                !user && location.state?.email ? (
-                  <ResetPasswordPage />
-                ) : (
-                  <Navigate to="/forgot-password" />
-                )
-              }
+              element={!user ? <ResetPasswordPage /> : <Navigate to="/" />}
             />
 
             <Route

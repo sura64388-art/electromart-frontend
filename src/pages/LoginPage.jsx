@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { LogIn, Mail, Lock, ArrowRight, Loader, Eye, EyeOff, Shield, Key } from "lucide-react";
+import { LogIn, Mail, Lock, ArrowRight, Loader, Eye, EyeOff, Shield, Key, ShoppingBag } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useUserStore } from "../stores/useUserStore";
 import toast from "react-hot-toast";
@@ -120,15 +120,28 @@ const LoginPage = () => {
             {/* FORM HEADER */}
             <div className="p-10 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700">
               <div className="text-center">
+                {/* LOGO */}
+                <div className="flex justify-center mb-6">
+                    <div className="flex items-center gap-2 text-left">
+                        <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-xl">
+                            <ShoppingBag className="text-red-600 dark:text-red-400" size={32} />
+                        </div>
+                        <div className="flex flex-col leading-none">
+                            <span className="text-gray-900 dark:text-white text-xl font-black tracking-tighter uppercase">Sree Saravana</span>
+                            <span className="text-red-600 dark:text-red-400 text-sm font-bold uppercase tracking-widest">Electricals</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg">
                   <Key size={16} />
-                  <span className="text-sm font-bold">SIGN IN TO CONTINUE</span>
+                  <span className="text-sm font-bold uppercase">Sign In</span>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">
                   Welcome Back!
                 </h2>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  Sign in to your Sree Saravana Electricials account
+                <p className="mt-2 text-base text-gray-600 dark:text-gray-400">
+                  Secure access to your account
                 </p>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { UserPlus, Mail, Lock, User, ArrowRight, Loader, Shield, CheckCircle, Eye, EyeOff, Sparkles } from "lucide-react";
+import { UserPlus, Mail, Lock, User, ArrowRight, Loader, Shield, CheckCircle, Eye, EyeOff, Sparkles, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
 import { GoogleLogin } from "@react-oauth/google";
 import { useUserStore } from "../stores/useUserStore";
@@ -173,15 +173,28 @@ const SignUpPage = () => {
             {/* FORM HEADER */}
             <div className="p-8 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 dark:border-gray-700">
               <div className="text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 mb-4 text-white rounded-full bg-gradient-to-r from-blue-500 to-indigo-500">
-                  <UserPlus size={16} />
-                  <span className="text-sm font-bold">CREATE ACCOUNT</span>
+                {/* LOGO */}
+                <div className="flex justify-center mb-6">
+                    <div className="flex items-center gap-2 text-left">
+                        <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-xl">
+                            <ShoppingBag className="text-red-600 dark:text-red-400" size={32} />
+                        </div>
+                        <div className="flex flex-col leading-none">
+                            <span className="text-gray-900 dark:text-white text-xl font-black tracking-tighter uppercase">Sree Saravana</span>
+                            <span className="text-red-600 dark:text-red-400 text-sm font-bold uppercase tracking-widest">Electricals</span>
+                        </div>
+                    </div>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Join Sree Saravana Electricials
+
+                <div className="inline-flex items-center gap-2 px-4 py-2 mb-4 text-white rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 shadow-md">
+                  <UserPlus size={16} />
+                  <span className="text-sm font-bold uppercase">Register</span>
+                </div>
+                <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">
+                  Create Account
                 </h2>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Create your account and start shopping premium electronics
+                <p className="mt-2 text-base text-gray-600 dark:text-gray-400">
+                  Join our premium electrical community
                 </p>
               </div>
             </div>
