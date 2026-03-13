@@ -55,28 +55,26 @@ const FeaturedProducts = ({ featuredProducts }) => {
 										</div>
 										<div className='p-4'>
 											<h3 className='text-lg font-bold mb-2 text-white leading-tight'>{product.name}</h3>
-											{/* Star Rating */}
-											<div className="flex items-center gap-1.5 mb-2">
-												<div className="flex items-center gap-0.5">
-													{[1, 2, 3, 4, 5].map((s) => (
-														<Star
-															key={s}
-															size={13}
-															className={s <= Math.round(product.rating || 0) ? "text-yellow-400 fill-yellow-400" : "text-gray-500"}
-														/>
-													))}
-												</div>
-												{product.rating > 0 && (
+											{/* Star Rating - Only show if there are reviews */}
+											{product.numReviews > 0 && (
+												<div className="flex items-center gap-1.5 mb-2">
+													<div className="flex items-center gap-0.5">
+														{[1, 2, 3, 4, 5].map((s) => (
+															<Star
+																key={s}
+																size={13}
+																className={s <= Math.round(product.rating || 0) ? "text-yellow-400 fill-yellow-400" : "text-gray-500"}
+															/>
+														))}
+													</div>
 													<span className="text-[11px] font-semibold text-gray-300">
 														{product.rating?.toFixed(1)}
 													</span>
-												)}
-												{product.numReviews > 0 && (
 													<span className="text-[10px] text-gray-400">
 														({product.numReviews})
 													</span>
-												)}
-											</div>
+												</div>
+											)}
 											<p className='text-2xl font-black text-emerald-400 mb-2'>
 												₹{product.price.toLocaleString()}
 											</p>
